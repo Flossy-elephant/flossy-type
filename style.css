@@ -1,0 +1,137 @@
+*{
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body{
+  font-family:'Courier New',monospace;
+  background:#0f0f0f;
+  color: #d0d0d0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.container{
+  /* background:white;
+  border-radius: 10px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  padding: 40px; */
+  max-width: 900px;
+  width: 100%;
+}
+
+.stats{
+  display: flex;
+  justify-content: space-evenly;
+  gap: 60px;
+  margin-bottom: 60px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #333;
+}
+
+.stat{
+  text-align: left;
+}
+.stat .label{
+  display: block;
+  font-size:12px;
+  color: #666;
+  text-transform:uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.stat .value{
+  display: block;
+  font-size:28px ;
+  font-weight: 300;
+  letter-spacing: 2px;
+  color: #ca8a38;
+}
+
+.words-container{
+  margin-bottom:40px ;
+  min-height: 100px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+.word{
+  font-size:20px ;
+  padding: 0;
+  transition:color 0.1s;
+  letter-spacing: 1px;
+  font-weight: 400;
+  color: #666;
+}
+
+.word.current{
+ color: #ca8a38;
+}
+
+.word.correct{
+  color: #4caf50;
+}
+
+.word.incorrect{
+  color: #e74c3c;
+}
+
+.input-section{
+  margin-bottom: 30px;
+}
+
+#typingInput{
+  width:100%;
+  padding: 0px;
+  font-size: 20px;
+  border: none;
+  border-bottom:2px solid #333;
+  background: transparent;
+  color: #d0d0d0;
+  transition: border-color 0.2s;
+  letter-spacing: 1px;
+  outline: none;
+  font-family: 'Courier New',monospace;
+  transition: border-color 0.3s;
+}
+
+#typingInput:focus{
+  border-bottom-color: #ca8a38;
+}
+
+#typingInput::placeholder {
+  color: #444;
+}
+
+.reset-btn {
+padding: 0;
+font-size:14px ;
+background:transparent;
+color: #666;
+border: none;
+cursor: pointer;
+font-family: 'Courier New',  monospace;
+text-transform: uppercase;
+letter-spacing: 1px;  
+transition: color 0.2s;
+font-weight: 400;
+display: block;
+margin: 0 auto;
+}
+
+.reset-btn:hover {
+  color: #ca8a38;
+}
+
+/* .reset-btn:active {
+  transform: scale(0.98);
+} */

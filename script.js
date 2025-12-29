@@ -1,8 +1,30 @@
-const words =[
-  'the', 'quick', 'brown', 'fox', 'jumps', 'over', 'lazy', 'dog',
-  'javascript', 'is', 'fun', 'typing', 'test', 'speed', 'practice',
-  'keyboard', 'challenge', 'accuracy', 'performance', 'learn'
-]
+let words = []
+let WORD_LIMIT = 30
+let TIME_LIMIT = 25
+fetch('./words.json')
+  .then(response => response.json())
+  .then(data => {
+    words = data.words.slice(0,WORD_LIMIT)
+    console.log('words loaded:',words.length)
+    shuffleWords()
+    init()
+  })
+  .catch(error => {
+    console.error('Error loading words: ',error)
+    alert('could not load words.json file')
+  })
+
+
+function shuffleWords(){
+  for(let i = words.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1))
+    const temp = words[i]
+    words[i] = words[j]
+    words[j] = temp
+  }
+}
+
+
 
 let gameState = {
   currentWordIndex:0,
@@ -10,11 +32,12 @@ let gameState = {
   startTime: null,
   isActive:false,
   correctChars:0,
-  totalChars:0
+  totalChars:0,
+  timerInterval: null
 }
 
 const typingInput = document.getElementById('typingInput')
-const wordsContainer = document.getElementById('wordContainer')
+const wordsContainer = document.getElementById('wordsContainer')
 const resetBtn = document.getElementById('resetBtn')
 const wpmDisplay = document.getElementById('wpm')
 const accuracyDisplay = document.getElementById('accuracy')
@@ -50,6 +73,21 @@ function displayWords(){
   })
 }
 
+function startTimer(){
+  gameState.timerInterval =  setInterval(()=>{
+    const elapsedSeconds = (Date.now() - gameState.startTime)/1000
+
+    if(elapsedSeconds >= TIME_LIMIT || gameState.currentWordIndex >= words.length){
+      endTest()
+      return
+    }
+
+
+    timeDisplay.textContent = Math.floor(TIME_LIMIT - elapsedSeconds) + 's'
+  },100)
+}
+
+
 function handleInput(event){
 
   const input = event.target.value
@@ -57,13 +95,14 @@ function handleInput(event){
   if(!gameState.isActive && input.length > 0){
     gameState.isActive = true
     gameState.startTime = Date.now()
+    startTimer()
   }
 
   if(input.endsWith(' ')){
     const typedWord = input.trim()
     gameState.typedWords.push(typedWord)
     gameState.currentWordIndex++
-    typingInput.value = ' '
+    typingInput.value = ''
     
     if(gameState.currentWordIndex >= words.length){
       endTest()
@@ -71,7 +110,7 @@ function handleInput(event){
     }
 
     displayWords()
-    
+    // updateStats()
   }
 }
 
@@ -110,13 +149,16 @@ function endTest(){
 }
 
 function resetTest(){
+  clearInterval(gameState.timerInterval)
+
   gameState = {
     currentWordIndex: 0,
     typedWords: [],
     startTime: null,
     isActive: false,
     correctChars: 0,
-    totalChars: 0
+    totalChars: 0,
+    timerInterval:null
   }
 
   typingInput.value = ''
@@ -126,8 +168,9 @@ function resetTest(){
 
   wpmDisplay.textContent = '0'
   accuracyDisplay.textContent = '100%'
-  timeDisplay.textContent = '0s'
+  timeDisplay.textContent = TIME_LIMIT + 's'
 
+  shuffleWords()
   displayWords()
 }
 

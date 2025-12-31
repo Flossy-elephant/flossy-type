@@ -1,6 +1,8 @@
 let words = []
-let WORD_LIMIT = 30
+let WORD_LIMIT = 70
 let TIME_LIMIT = 25
+
+
 fetch('./words.json')
   .then(response => response.json())
   .then(data => {
@@ -130,10 +132,10 @@ for(let i = 0 ; i < gameState.typedWords.length ; i++){
     correctWords++
   }
 }
-
-const accuracy = gameState.typedWords.length > 0
+  
+ const accuracy = gameState.typedWords.length > 0
 ? Math.round((correctWords / gameState.typedWords.length) * 100)
-: 100
+: null
 
 wpmDisplay.textContent = wpm
 accuracyDisplay.textContent = accuracy + '%'

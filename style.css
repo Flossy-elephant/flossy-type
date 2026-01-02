@@ -96,8 +96,8 @@ body{
 }
 
 .word.correct{
-  color: #9400d3;
-  /* opacity: 0.85; */
+  color: #f4f4ff;
+  opacity: 0.2;
 }
 
 .word.incorrect{
@@ -127,7 +127,7 @@ body{
 }
 
 #typingInput:focus{
-  border-bottom-color: #9400d3;
+  border-bottom-color: #f4f4ff;
   transition: all 0.2s;
 }
 
@@ -160,12 +160,8 @@ margin: 0 auto;
 .reset-btn:hover {
   color: #f4f4ff;
   background-color:  rgba(148, 0, 211, 0.15);
-;
   border-radius: 6px;
-  transition: all 0.5s;
+  transition: all ease 0.5s;
 }
 
-/* .reset-btn:active {
-  transform: scale(0.98);
-} */
 

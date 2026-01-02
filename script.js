@@ -1,31 +1,21 @@
 let words = []
-let WORD_LIMIT = 70
-let TIME_LIMIT = 25
+
+let TIME_LIMIT = 30
 
 
-fetch('./words.json')
+fetch("englishSentences.json")
   .then(response => response.json())
   .then(data => {
-    words = data.words.slice(0,WORD_LIMIT)
-    console.log('words loaded:',words.length)
-    shuffleWords()
+    const sentences = Object.values(data).map(item => item.val)
+    const randomSentences = getRandomSentences(sentences,5)
+    words = randomSentences
+    .join(' ')
+    .split(' ')
+    .filter(word => word.length > 0)
+    .map(word => cleanWord(word))
     init()
   })
-  .catch(error => {
-    console.error('Error loading words: ',error)
-    alert('could not load words.json file')
-  })
-
-
-function shuffleWords(){
-  for(let i = words.length - 1; i > 0; i--){
-    const j = Math.floor(Math.random() * (i + 1))
-    const temp = words[i]
-    words[i] = words[j]
-    words[j] = temp
-  }
-}
-
+  .catch(error => console.error('error:',error))
 
 
 let gameState = {
@@ -116,6 +106,12 @@ function handleInput(event){
   }
 }
 
+document.addEventListener('click', () => {
+  if(gameState.isActive && !gameState.isActive){  
+    typingInput.focus()
+  }
+})
+
 function updateStats(){
 if(!gameState.isActive || gameState.startTime === null){
   return
@@ -172,7 +168,7 @@ function resetTest(){
   accuracyDisplay.textContent = '100%'
   timeDisplay.textContent = TIME_LIMIT + 's'
 
-  shuffleWords()
+
   displayWords()
 }
 
@@ -180,3 +176,12 @@ typingInput.addEventListener('input',handleInput)
 resetBtn.addEventListener('click',resetTest)
 
 init()
+
+function getRandomSentences(array,count){
+  const shuffled = [...array].sort(()=>0.5 - Math.random())
+  return shuffled.slice(0,count)
+}
+
+function cleanWord(word){
+  return word.replace(/[.,!?;:"'-]/g, '').toLowerCase()
+}

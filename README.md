@@ -19,3 +19,5 @@ Sentences sourced from [original source name] under GPL 3.0
 1. Clone the repo
 2. Open `index.html` in your browser
 3. Start typing!
+
+https://flossy-type.netlify.app/

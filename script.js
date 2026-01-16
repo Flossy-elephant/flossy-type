@@ -13,6 +13,7 @@ fetch("englishSentences.json")
     .split(' ')
     .filter(word => word.length > 0)
     .map(word => cleanWord(word))
+    console.log('Final words:', words) 
     init()
   })
   .catch(error => console.error('error:',error))
@@ -49,19 +50,55 @@ function displayWords(){
 
     if(index === gameState.currentWordIndex){
       wordDiv.classList.add('current')
+      wordDiv.textContent = ''
+
+      const typedLength  = typingInput.value.length
+      const typedWord = typingInput.value
+
+      for(let i = 0; i < word.length ; i++){
+          if(i === typedLength){
+            const cursor = document.createElement('span')
+            cursor.className = 'cursor'
+            wordDiv.appendChild(cursor)
+          }
+
+          const letterSpan =  document.createElement('span')
+          letterSpan.textContent = word[i]
+          letterSpan.className = 'letter'
+
+          if(i < typedLength){
+            if(word[i] === typedWord[i]){
+              letterSpan.classList.add('letter-correct')
+            }else{
+              letterSpan.classList.add('letter-incorrect')
+            }
+          }
+          
+          wordDiv.appendChild(letterSpan)
+
+          
+      }
+      if(typedLength >= word.length){
+        const cursor = document.createElement('span')
+        cursor.className = 'cursor'
+        wordDiv.appendChild(cursor)
+      }
+      
     }
-
-    else if(index < gameState.currentWordIndex){
-
-      if(gameState.typedWords[index] === word){
-        wordDiv.classList.add('correct')
-      }
-      else{
-        wordDiv.classList.add('incorrect')
-      }
+    else{
+      wordDiv.textContent = word
+      if(index < gameState.currentWordIndex){
+        if(gameState.typedWords[index] === word){
+          wordDiv.classList.add('correct')
+        }
+        else{
+          wordDiv.classList.add('incorrect')
+        }
+      }  
     }
 
     wordsContainer.appendChild(wordDiv)
+
   })
 }
 
@@ -87,12 +124,22 @@ function handleInput(event){
   if(!gameState.isActive && input.length > 0){
     gameState.isActive = true
     gameState.startTime = Date.now()
+    document.body.classList.add('test-active')
     startTimer()
   }
 
+  displayWords()
+
+
   if(input.endsWith(' ')){
     const typedWord = input.trim()
-    gameState.typedWords.push(typedWord)
+    
+    if(gameState.typedWords.length === gameState.currentWordIndex){
+      gameState.typedWords[gameState.currentWordIndex] = typedWord
+    }else{
+      gameState.typedWords.push(typedWord)
+    }
+
     gameState.currentWordIndex++
     typingInput.value = ''
     
@@ -102,12 +149,26 @@ function handleInput(event){
     }
 
     displayWords()
-    // updateStats()
+
   }
 }
 
+typingInput.addEventListener('keydown',(event)=>{
+  if(event.key === 'Backspace'){
+    setTimeout(()=>{
+      const  input = typingInput.value
+      
+        if(input.length === 0 && gameState.currentWordIndex > 0){
+          gameState.currentWordIndex--
+          gameState.typedWords.pop()
+          displayWords()
+      }
+    },0)
+  }
+})
+
 document.addEventListener('click', () => {
-  if(gameState.isActive && !gameState.isActive){  
+  if(gameState.isActive){  
     typingInput.focus()
   }
 })
@@ -140,6 +201,8 @@ timeDisplay.textContent = Math.floor(elapsedSeconds) + 's'
 
 function endTest(){
   updateStats()
+  document.body.classList.remove('test-active')
+  document.body.classList.add('test-finished')
   gameState.isActive = false
   typingInput.disabled = true
   typingInput.placeholder = 'Test finished! Click reset to try again. '
@@ -147,6 +210,7 @@ function endTest(){
 }
 
 function resetTest(){
+  document.body.classList.remove('test-finished')
   clearInterval(gameState.timerInterval)
 
   gameState = {

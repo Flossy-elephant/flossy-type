@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Flossy Type - Typing Speed Test
 
 A minimalist typing speed test inspired by MonkeyType.
@@ -21,3 +22,7 @@ Sentences sourced from [original source name] under GPL 3.0
 3. Start typing!
 
 https://flossy-type.netlify.app/
+=======
+# flossy-type
+a typing speed webapp
+>>>>>>> 8f8081f (added the glass effect also added the cursor that hovers over each letter as you type it)
